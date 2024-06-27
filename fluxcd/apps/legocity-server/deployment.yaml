@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: legocity-server
+  labels:
+    app.kubernetes.io/name: server
+    app.kubernetes.io/instance: legocity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: server
+      app.kubernetes.io/instance: legocity
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: server
+        app.kubernetes.io/instance: legocity
+    spec:
+      serviceAccountName: legocity-server
+      containers:
+        - name: server
+          image: "dniel/legocity-server"
+          imagePullPolicy: Always
+          ports:
+            - name: legocity
+              containerPort: 8080
+          env:
+            - name: "TZ"
+              value: "Europe/Oslo"
+            - name: "MQTT_HOST"
+              value: "mqtt-mosquitto"
+            - name: "MQTT_PORT"
+              value: "1883"
+            - name: "MQTT_ENABLED"
+              value: "true"
+          livenessProbe:
+            tcpSocket:
+              port: legocity
+            initialDelaySeconds: 5
+            periodSeconds: 1
+          readinessProbe:
+            tcpSocket:
+              port: legocity
+            initialDelaySeconds: 3
+            periodSeconds: 3

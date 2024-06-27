@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-red
+  namespace: node-red
+  labels:
+    app: node-red
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-red
+  template:
+    metadata:
+      labels:
+        app: node-red
+    spec:
+      serviceAccountName: nodered
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: node-red
+        image: nodered/node-red
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 1880
+          name: node-red-ui
+        securityContext:
+          privileged: true
+#        volumeMounts:
+#        - name: node-red-data
+#          mountPath: /data
+        env:
+        - name: NODE_RED_ENABLE_PROJECTS
+          value: "true"
+        - name: MQTT_IP
+          value: "192.168.1.20"
+        - name: TZ
+          value: "Europe/Oslo"
+#      volumes:
+#      - name: node-red-data
+#        persistentVolumeClaim:
+#          claimName: node-red-claim

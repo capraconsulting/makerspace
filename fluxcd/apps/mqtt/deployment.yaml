@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-mosquitto
+  namespace: mqtt
+  labels:
+    app.kubernetes.io/name: mosquitto
+    app.kubernetes.io/instance: mqtt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mosquitto
+      app.kubernetes.io/instance: mqtt
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mosquitto
+        app.kubernetes.io/instance: mqtt
+    spec:
+      serviceAccountName: mqtt-mosquitto
+#      initContainers:
+#        - name: mosquitto-init
+#          image: "eclipse-mosquitto:1.6"
+#          imagePullPolicy: IfNotPresent
+#          command:
+#            - "/bin/sh"
+#            - -c
+ #         args:
+ #           - cp /data/mosquitto_secret/* /data/external_config/ && mosquitto_passwd -U /data/external_config/mosquitto_pwds
+#          volumeMounts:
+  #          - name: mosquitto-secret
+  #            mountPath: /data/mosquitto_secret
+#            - name: external-config
+#              mountPath: /data/external_config
+      containers:
+        - name: mosquitto
+          image: "eclipse-mosquitto:1.6"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: mqtt
+              containerPort: 1883
+              protocol: TCP
+            - name: websocket
+              containerPort: 9090
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: websocket
+            initialDelaySeconds: 5
+            periodSeconds: 1
+          readinessProbe:
+            tcpSocket:
+              port: websocket
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          volumeMounts:
+            - name: config
+              mountPath: /mosquitto/config/mosquitto.conf
+              subPath: mosquitto.conf
+ #           - name: data
+ #            mountPath: /mosquitto/data
+ #            subPath: 
+ #           - name: external-config
+ #             mountPath: /mosquitto/external_config
+      volumes:
+        - name: config
+          configMap:
+            name: mqtt-mosquitto
+#        - name: data
+#          persistentVolumeClaim:
+#            claimName: mqtt-claim
+#        - name: mosquitto-secret
+#          secret: 
+#            secretName: mosquitto-secret
+#        - name: external-config
+#          emptyDir:
+#            medium: Memory

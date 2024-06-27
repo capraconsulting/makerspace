@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqtt-mosquitto-public
+  namespace: mqtt
+spec:
+  selector:
+    app.kubernetes.io/name: mosquitto
+    app.kubernetes.io/instance: mqtt
+  ports:
+    - protocol: TCP
+      port: 1883 
+      targetPort: 1883
+  type: LoadBalancer
+  loadBalancerIP: "${mqtt_ip}"
