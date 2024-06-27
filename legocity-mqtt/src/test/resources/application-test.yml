@@ -1,0 +1,20 @@
+# enable security for tests.
+micronaut.security.token.jwt.signatures.secret.generator.secret: pleaseChangeThisSecretForANewOne
+micronaut.security.token.jwt.claims-validators.audience: requiredAudience
+
+# enable mqtt for tests.
+mqtt.enabled: true
+
+# Test-Resources is a Micronaut feature that allows you to start
+# containers before running tests. This is useful for integration tests
+# that require external services like databases, message brokers, etc.
+test-resources:
+  containers:
+    mosquitto:
+      image-name: eclipse-mosquitto
+      hostnames:
+        - mqtt.host
+      exposed-ports:
+        - mqtt.port: 1883
+      ro-fs-bind:
+        - "src/test-resources/mosquitto.conf": /mosquitto/config/mosquitto.conf

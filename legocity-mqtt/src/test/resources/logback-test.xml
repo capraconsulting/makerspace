@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%cyan(%d{yyyy-MM-dd HH:mm:ss.SSS}) %green(%X{user} %X{trace}) %gray([%thread]) %highlight(%-5level) %magenta(%logger{36}) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="io.nordlab.legocity" level="DEBUG" />
+    <logger name="io.micronaut.mqtt" level="TRACE" />
+
+    <logger name="org.testcontainers" level="INFO" />
+    <logger name="io.netty" level="INFO" />
+    <logger name="org.apache.http" level="INFO" />
+
+    <root level="WARN">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

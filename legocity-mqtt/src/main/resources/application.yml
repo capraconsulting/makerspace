@@ -1,0 +1,48 @@
+micronaut:
+  application:
+    name: legocity-server
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+  caches:
+    discovery-client:
+      enabled: false
+
+  server:
+    context-path: ${CONTEXT_PATH:/}
+    port: 8080
+
+  security:
+    enabled: false
+
+# Basic configuration for the MQTT, by default MQTT is disabled.
+# To enable MQTT, set environment variable MQTT_ENABLED=true
+mqtt:
+  enabled: false
+  client:
+    server-uri: tcp://192.168.1.20:1883
+    client-id: legocity-server-${random.int}
+    automatic-reconnect: true
+    max-reconnect-delay: 30000
+
+
+endpoints:
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+    disk-space:
+      enabled: false
+
+jackson:
+  serialization:
+    indentOutput: true
+    writeDatesAsTimestamps: false
+  deserialization:
+    useBigIntegerForInts: true
+    failOnUnknownProperties: false
+    adjustDatesToContextTimeZone: false
+  json-view:
+    enabled: true
