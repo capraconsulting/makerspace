@@ -1,7 +1,7 @@
 # Micropython for ESP32
 
 > [!NOTE]
-> Dette er en dump av notater fra Kristian om hvordan du kan bruke micropython på esp32. Lolin sine esp32 som vi har, komer ferdig installert med micropython.
+> Dette er en dump av notater fra Kristian om hvordan du kan bruke micropython på esp32. Lolin sine esp32 som vi har, kommer ferdig installert med micropython.
 
 
 - Kan brukes på visse esp32-modeller
