@@ -2,13 +2,13 @@ import machine
 import json
 import pn532_i2c
 
-# legocity/presence/0/state
+# legocity/station/0/state
 # { "type": "TRAIN_PRESENT", "value": "123" }
 # { "type": "STATUS", "value": "READY" }
 
 # ------------------------------------------------------------ Setup
 
-state_topic = b'legocity/presence/0/state'
+state_topic = b'legocity/station/0/state'
 
 i2c = machine.I2C(1, scl=machine.Pin(10), sda=machine.Pin(9))
 pn532 = pn532_i2c.PN532_I2C(i2c)
